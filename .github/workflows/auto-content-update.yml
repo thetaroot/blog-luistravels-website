@@ -1,0 +1,43 @@
+name: Auto Content Update
+
+on:
+  push:
+    branches: [ main ]
+    paths: 
+      - 'content/**'
+  workflow_dispatch:
+
+jobs:
+  update-content-stats:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: |
+        npm install gray-matter glob
+        
+    - name: Generate content statistics
+      run: |
+        node scripts/generate-content-stats.js
+        
+    - name: Commit updated files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add src/data/ public/sitemap.xml
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "🤖 Auto-update: content statistics, worldmap, hashtags & sitemap [skip ci]"
+          git push
+        fi

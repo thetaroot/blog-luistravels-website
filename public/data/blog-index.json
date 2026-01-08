@@ -1,0 +1,270 @@
+{
+  "posts": [
+    {
+      "title": "Testing the Automated System",
+      "country": "Thailand",
+      "city": "Bangkok",
+      "date": "2024-07-05",
+      "gallery": "thailand/bangkok",
+      "tags": ["automation", "testing", "development"],
+      "featured": true,
+      "file": "2024-07-05-automation-test",
+      "slug": "2024-07-05-automation-test"
+    },
+    {
+      "title": "Digital Nomad Life in Medellín",
+      "country": "Colombia",
+      "city": "Medellín",
+      "date": "2024-02-01",
+      "gallery": "colombia/medellin",
+      "tags": ["nomad", "work", "colombia"],
+      "featured": false,
+      "file": "2024-02-01-medellin-digital-nomad",
+      "slug": "2024-02-01-medellin-digital-nomad"
+    },
+    {
+      "title": "Bangkok Street Food Adventures",
+      "country": "Thailand",
+      "city": "Bangkok",
+      "date": "2024-01-15",
+      "gallery": "thailand/bangkok",
+      "tags": ["food", "culture", "bangkok"],
+      "featured": true,
+      "file": "2024-01-15-bangkok-street-food",
+      "slug": "2024-01-15-bangkok-street-food"
+    },
+    {
+      "title": "Tokyo Neon Nights",
+      "country": "Japan",
+      "city": "Tokyo",
+      "date": "2024-05-15",
+      "gallery": "japan/tokyo",
+      "tags": ["nightlife", "urban", "photography"],
+      "featured": true,
+      "file": "japan-tokyo-neon.md",
+      "slug": "japan-tokyo-neon"
+    },
+    {
+      "title": "Sunrise at Machu Picchu",
+      "country": "Peru",
+      "city": "Cusco",
+      "date": "2024-05-01",
+      "gallery": "peru/cusco",
+      "tags": ["hiking", "ancient", "sunrise"],
+      "featured": true,
+      "file": "peru-cusco-machu.md",
+      "slug": "peru-cusco-machu"
+    },
+    {
+      "title": "Santorini Blue Domes",
+      "country": "Greece",
+      "city": "Santorini",
+      "date": "2024-04-20",
+      "gallery": "greece/santorini",
+      "tags": ["architecture", "blue", "mediterranean"],
+      "featured": false,
+      "file": "greece-santorini-domes.md",
+      "slug": "greece-santorini-domes"
+    },
+    {
+      "title": "Safari in the Serengeti",
+      "country": "Tanzania",
+      "city": "Serengeti",
+      "date": "2024-04-05",
+      "gallery": "tanzania/serengeti",
+      "tags": ["wildlife", "safari", "adventure"],
+      "featured": false,
+      "file": "tanzania-serengeti-safari.md",
+      "slug": "tanzania-serengeti-safari"
+    },
+    {
+      "title": "Northern Lights Magic",
+      "country": "Iceland",
+      "city": "Reykjavik",
+      "date": "2024-03-12",
+      "gallery": "iceland/reykjavik",
+      "tags": ["aurora", "winter", "nature"],
+      "featured": true,
+      "file": "iceland-reykjavik-aurora.md",
+      "slug": "iceland-reykjavik-aurora"
+    },
+    {
+      "title": "Bali Rice Terraces",
+      "country": "Indonesia",
+      "city": "Ubud",
+      "date": "2024-03-01",
+      "gallery": "indonesia/ubud",
+      "tags": ["nature", "rice", "landscape"],
+      "featured": false,
+      "file": "indonesia-ubud-rice.md",
+      "slug": "indonesia-ubud-rice"
+    },
+    {
+      "title": "Moroccan Medina Maze",
+      "country": "Morocco",
+      "city": "Marrakech",
+      "date": "2024-02-18",
+      "gallery": "morocco/marrakech",
+      "tags": ["culture", "market", "maze"],
+      "featured": false,
+      "file": "morocco-marrakech-medina.md",
+      "slug": "morocco-marrakech-medina"
+    },
+    {
+      "title": "Swiss Alpine Adventure",
+      "country": "Switzerland",
+      "city": "Zermatt",
+      "date": "2024-02-05",
+      "gallery": "switzerland/zermatt",
+      "tags": ["mountains", "skiing", "adventure"],
+      "featured": false,
+      "file": "switzerland-zermatt-alpine.md",
+      "slug": "switzerland-zermatt-alpine"
+    },
+    {
+      "title": "New York City Hustle",
+      "country": "USA",
+      "city": "New York",
+      "date": "2024-01-22",
+      "gallery": "usa/newyork",
+      "tags": ["urban", "hustle", "skyline"],
+      "featured": true,
+      "file": "usa-newyork-hustle.md",
+      "slug": "usa-newyork-hustle"
+    },
+    {
+      "title": "Patagonia Wilderness",
+      "country": "Argentina",
+      "city": "El Calafate",
+      "date": "2024-01-10",
+      "gallery": "argentina/patagonia",
+      "tags": ["wilderness", "hiking", "glaciers"],
+      "featured": false,
+      "file": "argentina-patagonia-wild.md",
+      "slug": "argentina-patagonia-wild"
+    },
+    {
+      "title": "Kerala Backwaters",
+      "country": "India",
+      "city": "Alleppey",
+      "date": "2023-12-28",
+      "gallery": "india/kerala",
+      "tags": ["backwaters", "boat", "peaceful"],
+      "featured": false,
+      "file": "india-kerala-backwaters.md",
+      "slug": "india-kerala-backwaters"
+    },
+    {
+      "title": "Dubai Desert Dreams",
+      "country": "UAE",
+      "city": "Dubai",
+      "date": "2023-12-15",
+      "gallery": "uae/dubai",
+      "tags": ["desert", "luxury", "adventure"],
+      "featured": false,
+      "file": "uae-dubai-desert.md",
+      "slug": "uae-dubai-desert"
+    },
+    {
+      "title": "Australian Outback",
+      "country": "Australia",
+      "city": "Alice Springs",
+      "date": "2023-12-01",
+      "gallery": "australia/outback",
+      "tags": ["outback", "adventure", "red-rock"],
+      "featured": false,
+      "file": "australia-outback-adventure.md",
+      "slug": "australia-outback-adventure"
+    },
+    {
+      "title": "Fjords of Norway",
+      "country": "Norway",
+      "city": "Bergen",
+      "date": "2023-11-18",
+      "gallery": "norway/bergen",
+      "tags": ["fjords", "nature", "dramatic"],
+      "featured": true,
+      "file": "norway-bergen-fjords.md",
+      "slug": "norway-bergen-fjords"
+    },
+    {
+      "title": "Turkish Delights",
+      "country": "Turkey",
+      "city": "Istanbul",
+      "date": "2023-11-05",
+      "gallery": "turkey/istanbul",
+      "tags": ["culture", "food", "history"],
+      "featured": false,
+      "file": "turkey-istanbul-delights.md",
+      "slug": "turkey-istanbul-delights"
+    },
+    {
+      "title": "Amazon Rainforest",
+      "country": "Brazil",
+      "city": "Manaus",
+      "date": "2023-10-22",
+      "gallery": "brazil/amazon",
+      "tags": ["rainforest", "wildlife", "adventure"],
+      "featured": false,
+      "file": "brazil-amazon-rainforest.md",
+      "slug": "brazil-amazon-rainforest"
+    },
+    {
+      "title": "Scottish Highlands",
+      "country": "Scotland",
+      "city": "Edinburgh",
+      "date": "2023-10-08",
+      "gallery": "scotland/highlands",
+      "tags": ["highlands", "castles", "dramatic"],
+      "featured": false,
+      "file": "scotland-highlands-adventure.md",
+      "slug": "scotland-highlands-adventure"
+    },
+    {
+      "title": "Maldives Paradise",
+      "country": "Maldives",
+      "city": "Male",
+      "date": "2023-09-25",
+      "gallery": "maldives/paradise",
+      "tags": ["paradise", "ocean", "relaxation"],
+      "featured": true,
+      "file": "maldives-paradise-ocean.md",
+      "slug": "maldives-paradise-ocean"
+    },
+    {
+      "title": "Egyptian Pyramids",
+      "country": "Egypt",
+      "city": "Cairo",
+      "date": "2023-09-12",
+      "gallery": "egypt/cairo",
+      "tags": ["ancient", "pyramids", "history"],
+      "featured": false,
+      "file": "egypt-cairo-pyramids.md",
+      "slug": "egypt-cairo-pyramids"
+    },
+    {
+      "title": "Costa Rica Wildlife",
+      "country": "Costa Rica",
+      "city": "San Jose",
+      "date": "2023-08-28",
+      "gallery": "costarica/wildlife",
+      "tags": ["wildlife", "nature", "biodiversity"],
+      "featured": false,
+      "file": "costarica-wildlife-adventure.md",
+      "slug": "costarica-wildlife-adventure"
+    },
+    {
+      "title": "Canadian Rockies",
+      "country": "Canada",
+      "city": "Banff",
+      "date": "2023-08-15",
+      "gallery": "canada/banff",
+      "tags": ["mountains", "lakes", "nature"],
+      "featured": false,
+      "file": "canada-banff-rockies.md",
+      "slug": "canada-banff-rockies"
+    }
+  ],
+  "lastUpdated": "2024-07-25T12:00:00Z",
+  "totalPosts": 24
+}

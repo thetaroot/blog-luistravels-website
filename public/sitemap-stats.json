@@ -1,0 +1,16 @@
+{
+  "totalUrls": 4,
+  "priorityDistribution": {
+    "1.0": 1,
+    "0.9": 1,
+    "0.8": 1,
+    "0.7": 1
+  },
+  "changeFrequencyDistribution": {
+    "weekly": 2,
+    "daily": 1,
+    "monthly": 1
+  },
+  "totalImages": 0,
+  "generatedAt": "2025-08-04T07:18:18.704Z"
+}

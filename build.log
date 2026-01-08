@@ -1,0 +1,80 @@
+
+> personal-portfolio@0.1.0 build
+> node scripts/generate-content-stats.js && node scripts/generate-sitemap.js && next build
+
+🚀 Generating content statistics...
+📝 Scanning blog posts...
+Found 0 blog posts across 0 countries
+🖼️ Scanning gallery images...
+Found 0 images across 0 countries
+🔄 Combining statistics...
+Generated stats for 0 countries
+💾 Writing data files...
+📊 Data files written:
+  - src/data/countries.json
+  - src/data/blog-index.json
+  - src/data/gallery-index.json
+🤖 Generating automation files...
+🤖 Automation files generated:
+  - src/data/worldmap.json
+  - src/data/hashtag-index.json
+  - public/sitemap.xml
+✅ Content statistics generated successfully!
+🗺️  Generating comprehensive sitemap...
+Blog module not found, generating sitemap without blog posts: Cannot find module '/Users/luis/code/personalpage/src/lib/blog/index.js' imported from /Users/luis/code/personalpage/scripts/generate-sitemap.js
+📊 Generated 4 sitemap entries:
+   - 4 static pages
+   - 0 blog posts
+✅ Sitemap saved to /Users/luis/code/personalpage/public/sitemap.xml
+💾 Backup saved to /Users/luis/code/personalpage/public/sitemap-1754009858767.xml
+📈 Sitemap statistics:
+   - Total URLs: 4
+   - Total Images: 0
+   - Priority distribution: { '1.0': 1, '0.9': 1, '0.8': 1, '0.7': 1 }
+   - Change frequency distribution: { weekly: 2, daily: 1, monthly: 1 }
+
+🎉 Sitemap generation completed successfully!
+🔗 View sitemap at: https://heretheregone.com/sitemap.xml
+  ▲ Next.js 14.2.5
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+
+Failed to compile.
+
+./src/app/blog/[slug]/not-found.tsx
+28:28  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+28:49  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+
+./src/app/error.tsx
+129:29  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+
+./src/app/not-found.tsx
+79:27  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+80:22  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+169:24  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+169:40  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+
+./src/app/page.tsx
+149:6  Warning: React Hook useEffect has a missing dependency: 'mousePosition'. Either include it or remove the dependency array. You can also replace multiple useState variables with useReducer if 'setRevealCenter' needs the current value of 'mousePosition'.  react-hooks/exhaustive-deps
+509:6  Warning: React Hook useEffect has missing dependencies: 'goToNextSection' and 'goToPrevSection'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+556:6  Warning: React Hook useEffect has missing dependencies: 'goToNextSection' and 'goToPrevSection'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+609:6  Warning: React Hook useEffect has missing dependencies: 'currentSection.type' and 'goToNextSection'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/gallery/GalleryLightbox.tsx
+51:6  Warning: React Hook useEffect has missing dependencies: 'handleNext' and 'handlePrevious'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/image/AdvancedImage.tsx
+262:13  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+268:13  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+
+./src/components/image/ImageOptimizationProvider.tsx
+127:6  Warning: React Hook useEffect has a missing dependency: 'setupPerformanceReporting'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/lib/performance/react-optimizations.ts
+24:10  Warning: React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead.  react-hooks/exhaustive-deps
+58:10  Warning: React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead.  react-hooks/exhaustive-deps
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
