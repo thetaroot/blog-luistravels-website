@@ -123,7 +123,7 @@ export default function SearchSuggestions({
               onClick={() => onSuggestionClick(query)}
             >
               <Search className="w-4 h-4 inline mr-2" />
-              Search for "{query}"
+              Search for &quot;{query}&quot;
             </button>
           </div>
         </div>

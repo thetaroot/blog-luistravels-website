@@ -8,6 +8,7 @@ import { SchemaGenerator } from '@/lib/seo/SchemaGenerator'
 import { LocalSEOOptimizer } from '@/lib/seo/LocalSEOOptimizer'
 import { SEOMetaGenerator } from '@/lib/seo/SEOMetaGenerator'
 import { getBlogPosts, getBlogPost } from '@/lib/blog'
+import type { BlogPost } from '@/lib/blog/types'
 
 // Configuration
 const seoConfig = {
@@ -138,7 +139,6 @@ async function handleSchemaGeneration(
 
     // Generate comprehensive schema
     const blogSchemas = schemaGenerator.generateBlogPostSchema(post)
-    const locationSchemas = schemaGenerator.generateLocationSchema(post)
     const organizationSchema = schemaGenerator.generateOrganizationSchema()
     const websiteSchema = schemaGenerator.generateWebsiteSchema()
 
@@ -149,7 +149,6 @@ async function handleSchemaGeneration(
 
     const allSchemas = [
       ...blogSchemas,
-      ...locationSchemas,
       ...localBusinessSchemas,
       organizationSchema,
       websiteSchema
@@ -164,7 +163,7 @@ async function handleSchemaGeneration(
         location: post.location
       },
       schemas: allSchemas,
-      jsonLd: schemaGenerator.generateJsonLd(allSchemas),
+      jsonLd: schemaGenerator.generateJsonLd(allSchemas as any),
       metadata: {
         schemaCount: allSchemas.length,
         includeLocal,

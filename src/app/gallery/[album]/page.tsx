@@ -7,7 +7,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getGalleryAlbum, getGalleryAlbums, getGalleryImages } from '@/lib/gallery'
-import { generateGallerySchema, generateImageGallerySchema } from '@/lib/seo/structured-data'
+import { generateImageGallerySchema } from '@/lib/seo/structured-data'
 import { EnhancedMetaTags } from '@/components/seo/SEOProvider'
 import { DynamicBreadcrumbs } from '@/components/navigation/Breadcrumbs'
 import { SmartImage } from '@/components/image/AdvancedImage'
@@ -21,9 +21,9 @@ export async function generateStaticParams() {
   try {
     const albums = await getGalleryAlbums()
     console.log(`🖼️ Generating ${albums.length} gallery album routes for SEO`)
-    
-    return albums.map((album) => ({
-      album: album.slug
+
+    return albums.map((albumSlug) => ({
+      album: albumSlug
     }))
   } catch (error) {
     console.warn('Gallery albums not found, generating empty static params')
@@ -49,22 +49,23 @@ export async function generateMetadata({ params }: GalleryAlbumPageProps): Promi
 
     const canonicalUrl = `https://heretheregone.com/gallery/${params.album}`
     const imageCount = album.images?.length || 0
-    const enhancedDescription = `Explore ${imageCount} stunning ${album.category || 'travel'} photos from ${album.location || 'around the world'}. ${album.description} | Professional travel photography by Luis.`
-    
+    const category = 'travel'
+    const location = 'Travel Locations'
+    const description = `Explore stunning ${album.name.toLowerCase()} travel photography.`
+    const enhancedDescription = `Explore ${imageCount} stunning ${category} photos from ${location}. ${description} | Professional travel photography by Luis.`
+
     // Enhanced keywords combining album data
     const keywords = [
-      ...album.tags || [],
-      album.location,
-      album.category,
+      album.name,
       'travel photography',
       'digital nomad',
       'professional photography',
-      `${album.location} photos`,
-      `${album.category} gallery`
+      `${location} photos`,
+      `${category} gallery`
     ].filter(Boolean)
 
     return {
-      title: `${album.title} - Travel Photo Gallery | Here There & Gone`,
+      title: `${album.name} - Travel Photo Gallery | Here There & Gone`,
       description: enhancedDescription.substring(0, 155),
       keywords: keywords.slice(0, 15),
       
@@ -92,7 +93,7 @@ export async function generateMetadata({ params }: GalleryAlbumPageProps): Promi
 
       // Complete Open Graph for social sharing
       openGraph: {
-        title: `${album.title} - Travel Photography`,
+        title: `${album.name} - Travel Photography`,
         description: enhancedDescription.substring(0, 155),
         url: canonicalUrl,
         siteName: 'Here There & Gone',
@@ -101,13 +102,13 @@ export async function generateMetadata({ params }: GalleryAlbumPageProps): Promi
           url: `https://heretheregone.com/images/gallery/${img.filename}`,
           width: img.width || 1200,
           height: img.height || 630,
-          alt: img.alt || img.caption || album.title,
+          alt: img.alt || img.caption || album.name,
           type: img.format || 'image/jpeg',
         })) || [{
           url: 'https://heretheregone.com/images/default-gallery.jpg',
           width: 1200,
           height: 630,
-          alt: album.title
+          alt: album.name
         }],
         locale: 'en_US',
         alternateLocale: ['de_DE', 'es_ES']
@@ -118,9 +119,9 @@ export async function generateMetadata({ params }: GalleryAlbumPageProps): Promi
         card: 'summary_large_image',
         site: '@heretheregone',
         creator: '@luis',
-        title: `${album.title} - Travel Photography`,
+        title: `${album.name} - Travel Photography`,
         description: enhancedDescription.substring(0, 155),
-        images: album.images?.[0] ? 
+        images: album.images?.[0] ?
           [`https://heretheregone.com/images/gallery/${album.images[0].filename}`] :
           ['https://heretheregone.com/images/default-gallery.jpg']
       },
@@ -141,19 +142,19 @@ export async function generateMetadata({ params }: GalleryAlbumPageProps): Promi
         'robots': 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
         
         // Geographic data
-        'geo.region': album.countryCode || 'WORLDWIDE',
-        'geo.placename': album.location || 'Travel Locations',
-        'ICBM': album.coordinates || '0,0',
-        
+        'geo.region': 'WORLDWIDE',
+        'geo.placename': location,
+        'ICBM': '0,0',
+
         // Content classification
         'content-type': 'image/gallery',
-        'content-category': album.category || 'travel',
+        'content-category': category,
         'image-count': imageCount.toString(),
-        
+
         // Enhanced discovery
         'keywords': keywords.join(', '),
-        'subject': `${album.title} travel photography`,
-        'coverage': album.location || 'worldwide',
+        'subject': `${album.name} travel photography`,
+        'coverage': 'worldwide',
         
         // Performance hints
         'theme-color': '#ffffff',
@@ -178,13 +179,12 @@ export default async function GalleryAlbumPage({ params }: GalleryAlbumPageProps
     }
 
     // Generate comprehensive structured data
-    const gallerySchema = generateGallerySchema(album)
-    const imageGallerySchema = generateImageGallerySchema(album)
-    
+    const imageGallerySchema = generateImageGallerySchema()
+
     // Combined structured data for maximum SEO impact
     const combinedSchema = {
       "@context": "https://schema.org",
-      "@graph": [gallerySchema, imageGallerySchema]
+      "@graph": [imageGallerySchema]
     }
 
     return (
@@ -198,14 +198,14 @@ export default async function GalleryAlbumPage({ params }: GalleryAlbumPageProps
         />
 
         {/* Enhanced SEO Meta Tags */}
-        <EnhancedMetaTags 
+        <EnhancedMetaTags
           pageData={{
             slug: `/gallery/${params.album}`,
-            title: album.title,
-            description: album.description,
-            keywords: album.tags || [],
-            category: album.category,
-            tags: album.tags,
+            title: album.name,
+            description: `Explore stunning ${album.name.toLowerCase()} travel photography.`,
+            keywords: [album.name, 'travel photography', 'digital nomad'],
+            category: 'travel',
+            tags: [album.name, 'travel photography', 'digital nomad'],
             images: album.images
           }}
           pageType="gallery"
@@ -215,49 +215,31 @@ export default async function GalleryAlbumPage({ params }: GalleryAlbumPageProps
         {/* Semantic HTML Structure */}
         <main className="gallery-album-page" itemScope itemType="https://schema.org/ImageGallery">
           {/* Enhanced Breadcrumbs */}
-          <DynamicBreadcrumbs pathname={`/gallery/${params.album}`} />
+          <DynamicBreadcrumbs />
           
           {/* Gallery Header */}
           <header className="gallery-header">
             <h1 itemProp="name" className="gallery-title">
-              {album.title}
+              {album.name}
             </h1>
-            
-            {album.description && (
-              <p itemProp="description" className="gallery-description">
-                {album.description}
-              </p>
-            )}
-            
+
+            <p itemProp="description" className="gallery-description">
+              Explore stunning {album.name.toLowerCase()} travel photography.
+            </p>
+
             <aside className="gallery-meta" role="complementary">
-              {album.location && (
-                <span 
-                  itemProp="contentLocation" 
-                  itemScope 
-                  itemType="https://schema.org/Place"
-                  className="gallery-location"
-                >
-                  📍 <span itemProp="name">{album.location}</span>
-                </span>
-              )}
-              
+              <span
+                itemProp="contentLocation"
+                itemScope
+                itemType="https://schema.org/Place"
+                className="gallery-location"
+              >
+                📍 <span itemProp="name">Travel Locations</span>
+              </span>
+
               <span className="gallery-count">
                 📸 {album.images?.length || 0} photos
               </span>
-              
-              {album.dateCreated && (
-                <time 
-                  itemProp="dateCreated" 
-                  dateTime={album.dateCreated}
-                  className="gallery-date"
-                >
-                  📅 {new Date(album.dateCreated).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </time>
-              )}
             </aside>
           </header>
 
@@ -276,12 +258,11 @@ export default async function GalleryAlbumPage({ params }: GalleryAlbumPageProps
                 >
                   <SmartImage
                     src={`/images/gallery/${image.filename}`}
-                    alt={image.alt || image.caption || `${album.title} photo ${index + 1}`}
-                    contextType="gallery"
+                    alt={image.alt || image.caption || `${album.name} photo ${index + 1}`}
+                    context="gallery"
                     priority={index < 6} // Prioritize first 6 images
                     width={image.width || 800}
                     height={image.height || 600}
-                    itemProp="url"
                   />
                   
                   {/* Enhanced image metadata */}
@@ -324,27 +305,25 @@ export default async function GalleryAlbumPage({ params }: GalleryAlbumPageProps
           </section>
 
           {/* Enhanced Tags Section */}
-          {album.tags && album.tags.length > 0 && (
-            <footer className="gallery-footer">
-              <section className="gallery-tags" aria-labelledby="tags-heading">
-                <h2 id="tags-heading" className="tags-title">Tags</h2>
-                <ul className="tags-list" role="list">
-                  {album.tags.map((tag) => (
-                    <li key={tag} className="tag-item">
-                      <a 
-                        href={`/gallery/tag/${tag}`}
-                        className="tag-link"
-                        itemProp="keywords"
-                        rel="tag"
-                      >
-                        #{tag}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            </footer>
-          )}
+          <footer className="gallery-footer">
+            <section className="gallery-tags" aria-labelledby="tags-heading">
+              <h2 id="tags-heading" className="tags-title">Tags</h2>
+              <ul className="tags-list" role="list">
+                {[album.name, 'travel photography', 'digital nomad'].map((tag) => (
+                  <li key={tag} className="tag-item">
+                    <a
+                      href={`/gallery/tag/${tag}`}
+                      className="tag-link"
+                      itemProp="keywords"
+                      rel="tag"
+                    >
+                      #{tag}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </footer>
         </main>
       </>
     )

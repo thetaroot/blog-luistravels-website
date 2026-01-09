@@ -77,3 +77,52 @@ export async function listBlogPostSlugs(): Promise<string[]> {
     return [];
   }
 }
+
+export async function getBlogCategories(): Promise<string[]> {
+  try {
+    const posts = await listBlogPosts();
+    const categories = new Set<string>();
+    posts.forEach(post => {
+      post.tags?.forEach(tag => categories.add(tag));
+    });
+    return Array.from(categories).sort();
+  } catch (error) {
+    console.error('Error getting blog categories:', error);
+    return [];
+  }
+}
+
+export async function getBlogCategory(category: string): Promise<{ name: string; count: number } | null> {
+  try {
+    const posts = await listBlogPosts();
+    const postsInCategory = posts.filter(post => post.tags?.includes(category));
+    return postsInCategory.length > 0 ? { name: category, count: postsInCategory.length } : null;
+  } catch (error) {
+    console.error(`Error getting category ${category}:`, error);
+    return null;
+  }
+}
+
+export async function getBlogPostsByCategory(category: string, language: 'en' | 'de' = 'en'): Promise<BlogPost[]> {
+  try {
+    const posts = await listBlogPosts(language);
+    return posts.filter(post => post.tags?.includes(category));
+  } catch (error) {
+    console.error(`Error getting posts for category ${category}:`, error);
+    return [];
+  }
+}
+
+export async function getAllBlogTags(): Promise<string[]> {
+  return getBlogCategories();
+}
+
+export async function getBlogTag(tag: string): Promise<{ name: string; count: number } | null> {
+  return getBlogCategory(tag);
+}
+
+export async function getBlogPostsByTag(tag: string, language: 'en' | 'de' = 'en'): Promise<BlogPost[]> {
+  return getBlogPostsByCategory(tag, language);
+}
+
+export { listBlogPosts as getBlogPosts };

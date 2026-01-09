@@ -23,9 +23,9 @@ export async function generateStaticParams() {
   try {
     const tags = await getAllBlogTags()
     console.log(`🏷️ Generating ${tags.length} blog tag routes for SEO`)
-    
-    return tags.map((tag) => ({
-      tag: tag.slug
+
+    return tags.map((tagSlug) => ({
+      tag: tagSlug
     }))
   } catch (error) {
     console.warn('Blog tags not found, generating empty static params')
@@ -57,8 +57,8 @@ export async function generateMetadata({ params, searchParams }: BlogTagPageProp
       ? `${tag.name} Travel Posts - Page ${page} | Here There & Gone`
       : `${tag.name} Travel Posts | Here There & Gone`
     
-    const enhancedDescription = `Explore ${postCount} travel stories and digital nomad experiences tagged with ${tag.name}. ${tag.description || `Discover insights, tips, and adventures related to ${tag.name}.`} | Professional travel content and photography.`
-    
+    const enhancedDescription = `Explore ${postCount} travel stories and digital nomad experiences tagged with ${tag.name}. Discover insights, tips, and adventures related to ${tag.name}. | Professional travel content and photography.`
+
     // Enhanced keywords for tag pages
     const keywords = [
       tag.name,
@@ -69,8 +69,7 @@ export async function generateMetadata({ params, searchParams }: BlogTagPageProp
       'nomad life',
       `${tag.name} experiences`,
       `${tag.name} tips`,
-      `${tag.name} guide`,
-      ...tag.relatedTags || []
+      `${tag.name} guide`
     ].filter(Boolean)
 
     return {
@@ -103,7 +102,7 @@ export async function generateMetadata({ params, searchParams }: BlogTagPageProp
         siteName: 'Here There & Gone',
         type: 'website',
         images: posts.slice(0, 4).map(post => ({
-          url: post.featuredImage || 'https://heretheregone.com/images/default-blog.jpg',
+          url: (post as any).featuredImage || 'https://heretheregone.com/images/default-blog.jpg',
           width: 1200,
           height: 630,
           alt: post.title
@@ -118,8 +117,8 @@ export async function generateMetadata({ params, searchParams }: BlogTagPageProp
         creator: '@luis',
         title: `${tag.name} Travel Content`,
         description: enhancedDescription.substring(0, 155),
-        images: posts[0]?.featuredImage ? 
-          [posts[0].featuredImage] :
+        images: (posts[0] as any)?.featuredImage ?
+          [(posts[0] as any).featuredImage] :
           ['https://heretheregone.com/images/default-blog.jpg']
       },
 
@@ -141,7 +140,7 @@ export async function generateMetadata({ params, searchParams }: BlogTagPageProp
         'page-number': page.toString(),
         'keywords': keywords.join(', '),
         'subject': `${tag.name} travel content`,
-        'topic-cluster': tag.cluster || 'travel',
+        'topic-cluster': 'travel',
         'theme-color': '#ffffff'
       }
     }
@@ -163,27 +162,32 @@ export default async function BlogTagPage({ params, searchParams }: BlogTagPageP
       notFound()
     }
 
-    const posts = await getBlogPostsByTag(params.tag, page)
-    const totalPosts = await getBlogPostsByTag(params.tag) // Get total count
+    // Get all posts for this tag
+    const allPosts = await getBlogPostsByTag(params.tag)
     const postsPerPage = 12
-    const totalPages = Math.ceil(totalPosts.length / postsPerPage)
+    const totalPages = Math.ceil(allPosts.length / postsPerPage)
+
+    // Calculate pagination
+    const startIndex = (page - 1) * postsPerPage
+    const endIndex = startIndex + postsPerPage
+    const posts = allPosts.slice(startIndex, endIndex)
 
     // Generate comprehensive structured data
     const topicSchema = generateTopicPageSchema({
       name: tag.name,
-      description: tag.description || `Travel content about ${tag.name}`,
+      description: `Explore travel stories and digital nomad experiences tagged with ${tag.name}.`,
       url: `https://heretheregone.com/blog/tag/${params.tag}`,
       posts: posts,
-      totalPosts: totalPosts.length,
+      totalPosts: allPosts.length,
       tag: tag.name,
-      cluster: tag.cluster
+      cluster: 'travel'
     })
 
     const breadcrumbSchema = generateBreadcrumbSchema([
-      { name: 'Home', href: '/' },
-      { name: 'Blog', href: '/blog' },
-      { name: 'Tags', href: '/blog/tags' },
-      { name: tag.name, href: `/blog/tag/${params.tag}` }
+      { name: 'Home', href: '/', position: 1 },
+      { name: 'Blog', href: '/blog', position: 2 },
+      { name: 'Tags', href: '/blog/tags', position: 3 },
+      { name: tag.name, href: `/blog/tag/${params.tag}`, position: 4 }
     ])
 
     const combinedSchema = {
@@ -202,12 +206,12 @@ export default async function BlogTagPage({ params, searchParams }: BlogTagPageP
         />
 
         {/* Enhanced SEO Meta Tags */}
-        <EnhancedMetaTags 
+        <EnhancedMetaTags
           pageData={{
             slug: `/blog/tag/${params.tag}`,
             title: `${tag.name} Travel Content`,
-            description: tag.description || `Travel stories about ${tag.name}`,
-            keywords: [tag.name, ...tag.relatedTags || []],
+            description: `Explore travel stories and digital nomad experiences tagged with ${tag.name}.`,
+            keywords: [tag.name, `${tag.name} travel`, `${tag.name} digital nomad`],
             tags: [tag.name]
           }}
           pageType="blog-tag"
@@ -217,7 +221,7 @@ export default async function BlogTagPage({ params, searchParams }: BlogTagPageP
         {/* Semantic HTML Structure */}
         <main className="blog-tag-page" itemScope itemType="https://schema.org/WebPage">
           {/* Enhanced Breadcrumbs */}
-          <DynamicBreadcrumbs pathname={`/blog/tag/${params.tag}`} />
+          <DynamicBreadcrumbs />
           
           {/* Tag Header */}
           <header className="tag-header">
@@ -229,15 +233,13 @@ export default async function BlogTagPage({ params, searchParams }: BlogTagPageP
               </h1>
             </div>
             
-            {tag.description && (
-              <p itemProp="description" className="tag-description">
-                {tag.description}
-              </p>
-            )}
-            
+            <p itemProp="description" className="tag-description">
+              Explore travel stories and digital nomad experiences tagged with {tag.name}.
+            </p>
+
             <aside className="tag-meta" role="complementary">
               <span className="post-count">
-                📝 {totalPosts.length} {totalPosts.length === 1 ? 'story' : 'stories'}
+                📝 {allPosts.length} {allPosts.length === 1 ? 'story' : 'stories'}
               </span>
               
               {totalPages > 1 && (
@@ -245,12 +247,10 @@ export default async function BlogTagPage({ params, searchParams }: BlogTagPageP
                   📄 Page {page} of {totalPages}
                 </span>
               )}
-              
-              {tag.cluster && (
-                <span className="topic-cluster">
-                  🎯 {tag.cluster} topic
-                </span>
-              )}
+
+              <span className="topic-cluster">
+                🎯 travel topic
+              </span>
             </aside>
           </header>
 
@@ -266,13 +266,13 @@ export default async function BlogTagPage({ params, searchParams }: BlogTagPageP
                     itemType="https://schema.org/BlogPosting"
                   >
                     {/* Post Image */}
-                    {post.featuredImage && (
+                    {(post as any).featuredImage && (
                       <div className="post-image">
                         <Link href={`/blog/${post.slug}`}>
                           <SmartImage
-                            src={post.featuredImage}
+                            src={(post as any).featuredImage}
                             alt={post.title}
-                            contextType="thumbnail"
+                            context="content"
                             priority={index < 4}
                             width={300}
                             height={200}
@@ -391,23 +391,6 @@ export default async function BlogTagPage({ params, searchParams }: BlogTagPageP
 
           {/* Tag Footer with Related Content */}
           <footer className="tag-footer">
-            {/* Related Tags */}
-            {tag.relatedTags && tag.relatedTags.length > 0 && (
-              <section className="related-tags" aria-labelledby="related-tags-heading">
-                <h2 id="related-tags-heading">Related Topics</h2>
-                <nav className="related-tags-nav">
-                  {tag.relatedTags.slice(0, 6).map((relatedTag) => (
-                    <Link
-                      key={relatedTag}
-                      href={`/blog/tag/${relatedTag}`}
-                      className="related-tag-link"
-                    >
-                      #{relatedTag}
-                    </Link>
-                  ))}
-                </nav>
-              </section>
-            )}
             
             {/* Navigation */}
             <section className="tag-navigation" aria-labelledby="nav-heading">

@@ -127,16 +127,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     // Dynamic category routes
     const categories = await getBlogCategories()
-    const categoryRoutes: MetadataRoute.Sitemap = categories.map((category) => ({
-      url: `${baseUrl}/blog/category/${category.slug}`,
+    const categoryRoutes: MetadataRoute.Sitemap = categories.map((categorySlug) => ({
+      url: `${baseUrl}/blog/category/${categorySlug}`,
       lastModified: currentDate,
       changeFrequency: 'weekly' as const,
       priority: 0.6,
       alternates: {
         languages: {
-          en: `${baseUrl}/blog/category/${category.slug}`,
-          de: `${baseUrl}/blog/category/${category.slug}?lang=de`,
-          'x-default': `${baseUrl}/blog/category/${category.slug}`
+          en: `${baseUrl}/blog/category/${categorySlug}`,
+          de: `${baseUrl}/blog/category/${categorySlug}?lang=de`,
+          'x-default': `${baseUrl}/blog/category/${categorySlug}`
         }
       }
     }))
@@ -144,33 +144,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Dynamic tag routes (only for tags with substantial content)
     const tags = await getAllBlogTags()
     const tagRoutes: MetadataRoute.Sitemap = tags
-      .filter(tag => tag.postCount && tag.postCount > 2) // Only index tags with 3+ posts
-      .map((tag) => ({
-        url: `${baseUrl}/blog/tag/${tag.slug}`,
+      .map((tagSlug) => ({
+        url: `${baseUrl}/blog/tag/${tagSlug}`,
         lastModified: currentDate,
         changeFrequency: 'weekly' as const,
-        priority: tag.postCount && tag.postCount > 5 ? 0.5 : 0.4,
+        priority: 0.5,
         alternates: {
           languages: {
-            en: `${baseUrl}/blog/tag/${tag.slug}`,
-            de: `${baseUrl}/blog/tag/${tag.slug}?lang=de`,
-            'x-default': `${baseUrl}/blog/tag/${tag.slug}`
+            en: `${baseUrl}/blog/tag/${tagSlug}`,
+            de: `${baseUrl}/blog/tag/${tagSlug}?lang=de`,
+            'x-default': `${baseUrl}/blog/tag/${tagSlug}`
           }
         }
       }))
 
     // Dynamic gallery album routes
     const albums = await getGalleryAlbums()
-    const galleryRoutes: MetadataRoute.Sitemap = albums.map((album) => ({
-      url: `${baseUrl}/gallery/${album.slug}`,
-      lastModified: album.dateModified || album.dateCreated || currentDate,
+    const galleryRoutes: MetadataRoute.Sitemap = albums.map((albumSlug) => ({
+      url: `${baseUrl}/gallery/${albumSlug}`,
+      lastModified: currentDate,
       changeFrequency: 'monthly' as const,
       priority: 0.6,
       alternates: {
         languages: {
-          en: `${baseUrl}/gallery/${album.slug}`,
-          de: `${baseUrl}/gallery/${album.slug}?lang=de`,
-          'x-default': `${baseUrl}/gallery/${album.slug}`
+          en: `${baseUrl}/gallery/${albumSlug}`,
+          de: `${baseUrl}/gallery/${albumSlug}?lang=de`,
+          'x-default': `${baseUrl}/gallery/${albumSlug}`
         }
       }
     }))

@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
         const phase9Result = optimizationResult.phase9QualityAssurance
 
         if (phase9Result) {
-          const result = {
+          const result: any = {
             post: {
               slug: post.slug,
               title: post.title,

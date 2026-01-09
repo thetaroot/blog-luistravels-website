@@ -173,7 +173,7 @@ export async function GET(request: NextRequest) {
         sortBy: options.sortBy,
         limit: options.limit,
         offset: options.offset || 0,
-        hasMore: (results.length - (options.offset || 0)) > options.limit
+        hasMore: (results.length - (options.offset || 0)) > (options.limit || 10)
       }
     }
 

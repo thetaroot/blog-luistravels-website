@@ -429,4 +429,11 @@ export function GalleryBreadcrumbs({ albumTitle, imageTitle, className }: Galler
   )
 }
 
+/**
+ * Dynamic Breadcrumbs - Auto-generates breadcrumbs from current path
+ */
+export function DynamicBreadcrumbs(props: Omit<BreadcrumbsProps, 'autoGenerate'>) {
+  return <Breadcrumbs {...props} autoGenerate={true} />
+}
+
 export default Breadcrumbs

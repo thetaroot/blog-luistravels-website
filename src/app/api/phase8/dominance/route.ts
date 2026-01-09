@@ -106,9 +106,9 @@ export async function POST(request: NextRequest) {
         overallDominanceScore: dominanceResult.searchOptimization.rankingSignals.overallDominanceScore
       },
       competitiveAnalysis: {
-        competitors: dominanceResult.searchOptimization.competitiveAnalysis.competitors.length,
-        advantages: dominanceResult.searchOptimization.competitiveAnalysis.advantages,
-        opportunities: dominanceResult.searchOptimization.competitiveAnalysis.opportunities
+        competitors: dominanceResult.searchOptimization.competitiveAdvantage.competitors.length,
+        advantages: dominanceResult.searchOptimization.competitiveAdvantage.advantages,
+        opportunities: dominanceResult.searchOptimization.competitiveAdvantage.opportunities
       },
       settings: {
         aggressiveMode,

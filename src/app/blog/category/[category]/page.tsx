@@ -23,9 +23,9 @@ export async function generateStaticParams() {
   try {
     const categories = await getBlogCategories()
     console.log(`📝 Generating ${categories.length} blog category routes for SEO`)
-    
-    return categories.map((category) => ({
-      category: category.slug
+
+    return categories.map((categorySlug) => ({
+      category: categorySlug
     }))
   } catch (error) {
     console.warn('Blog categories not found, generating empty static params')
@@ -57,7 +57,7 @@ export async function generateMetadata({ params, searchParams }: BlogCategoryPag
       ? `${category.name} Travel Stories - Page ${page} | Here There & Gone`
       : `${category.name} Travel Stories | Here There & Gone`
     
-    const enhancedDescription = `Discover ${postCount} inspiring ${category.name.toLowerCase()} travel stories and digital nomad experiences. ${category.description} | Professional travel insights and photography.`
+    const enhancedDescription = `Discover ${postCount} inspiring ${category.name.toLowerCase()} travel stories and digital nomad experiences. Professional travel insights and photography from around the world.`
     
     // Enhanced keywords combining category data
     const keywords = [
@@ -67,7 +67,6 @@ export async function generateMetadata({ params, searchParams }: BlogCategoryPag
       'digital nomad',
       'travel stories',
       'travel blog',
-      ...category.keywords || [],
       `${category.name} experiences`,
       `${category.name} guide`
     ].filter(Boolean)
@@ -102,7 +101,7 @@ export async function generateMetadata({ params, searchParams }: BlogCategoryPag
         siteName: 'Here There & Gone',
         type: 'website',
         images: posts.slice(0, 4).map(post => ({
-          url: post.featuredImage || 'https://heretheregone.com/images/default-blog.jpg',
+          url: (post as any).featuredImage || 'https://heretheregone.com/images/default-blog.jpg',
           width: 1200,
           height: 630,
           alt: post.title
@@ -118,8 +117,8 @@ export async function generateMetadata({ params, searchParams }: BlogCategoryPag
         creator: '@luis',
         title: `${category.name} Travel Stories`,
         description: enhancedDescription.substring(0, 155),
-        images: posts[0]?.featuredImage ? 
-          [posts[0].featuredImage] :
+        images: (posts[0] as any)?.featuredImage ?
+          [(posts[0] as any).featuredImage] :
           ['https://heretheregone.com/images/default-blog.jpg']
       },
 
@@ -167,31 +166,36 @@ export default async function BlogCategoryPage({ params, searchParams }: BlogCat
   try {
     const category = await getBlogCategory(params.category)
     const page = parseInt(searchParams.page || '1')
-    
+
     if (!category) {
       notFound()
     }
 
-    const posts = await getBlogPostsByCategory(params.category, page)
-    const totalPosts = await getBlogPostsByCategory(params.category) // Get total count
+    // Get all posts for this category
+    const allPosts = await getBlogPostsByCategory(params.category)
     const postsPerPage = 10
-    const totalPages = Math.ceil(totalPosts.length / postsPerPage)
+    const totalPages = Math.ceil(allPosts.length / postsPerPage)
+
+    // Calculate pagination
+    const startIndex = (page - 1) * postsPerPage
+    const endIndex = startIndex + postsPerPage
+    const posts = allPosts.slice(startIndex, endIndex)
 
     // Generate comprehensive structured data
     const collectionSchema = generateCollectionPageSchema({
       name: `${category.name} Travel Stories`,
-      description: category.description,
+      description: `Explore ${category.name.toLowerCase()} travel stories and experiences.`,
       url: `https://heretheregone.com/blog/category/${params.category}`,
       items: posts,
-      totalItems: totalPosts.length,
+      totalItems: allPosts.length,
       category: category.name
     })
 
     const breadcrumbSchema = generateBreadcrumbSchema([
-      { name: 'Home', href: '/' },
-      { name: 'Blog', href: '/blog' },
-      { name: 'Categories', href: '/blog/categories' },
-      { name: category.name, href: `/blog/category/${params.category}` }
+      { name: 'Home', href: '/', position: 1 },
+      { name: 'Blog', href: '/blog', position: 2 },
+      { name: 'Categories', href: '/blog/categories', position: 3 },
+      { name: category.name, href: `/blog/category/${params.category}`, position: 4 }
     ])
 
     const combinedSchema = {
@@ -210,14 +214,14 @@ export default async function BlogCategoryPage({ params, searchParams }: BlogCat
         />
 
         {/* Enhanced SEO Meta Tags */}
-        <EnhancedMetaTags 
+        <EnhancedMetaTags
           pageData={{
             slug: `/blog/category/${params.category}`,
             title: `${category.name} Travel Stories`,
-            description: category.description,
-            keywords: category.keywords || [],
+            description: `Explore ${category.name.toLowerCase()} travel stories and digital nomad experiences.`,
+            keywords: [category.name, `${category.name} travel`, 'digital nomad'],
             category: category.name,
-            tags: category.keywords
+            tags: [category.name]
           }}
           pageType="blog-category"
           language="en"
@@ -226,7 +230,7 @@ export default async function BlogCategoryPage({ params, searchParams }: BlogCat
         {/* Semantic HTML Structure */}
         <main className="blog-category-page" itemScope itemType="https://schema.org/CollectionPage">
           {/* Enhanced Breadcrumbs */}
-          <DynamicBreadcrumbs pathname={`/blog/category/${params.category}`} />
+          <DynamicBreadcrumbs />
           
           {/* Category Header */}
           <header className="category-header">
@@ -234,16 +238,10 @@ export default async function BlogCategoryPage({ params, searchParams }: BlogCat
               {category.name} Travel Stories
               {page > 1 && <span className="page-indicator"> - Page {page}</span>}
             </h1>
-            
-            {category.description && (
-              <p itemProp="description" className="category-description">
-                {category.description}
-              </p>
-            )}
-            
+
             <aside className="category-meta" role="complementary">
               <span className="post-count">
-                📝 {totalPosts.length} stories
+                📝 {allPosts.length} stories
               </span>
               
               {totalPages > 1 && (
@@ -269,13 +267,13 @@ export default async function BlogCategoryPage({ params, searchParams }: BlogCat
                     itemType="https://schema.org/BlogPosting"
                   >
                     {/* Post Image */}
-                    {post.featuredImage && (
+                    {(post as any).featuredImage && (
                       <div className="post-image">
                         <Link href={`/blog/${post.slug}`}>
                           <SmartImage
-                            src={post.featuredImage}
+                            src={(post as any).featuredImage}
                             alt={post.title}
-                            contextType="content"
+                            context="content"
                             priority={index < 3}
                             width={400}
                             height={250}

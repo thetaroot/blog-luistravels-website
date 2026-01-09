@@ -6,7 +6,7 @@
 
 import { NextResponse } from 'next/server'
 import { getBlogPosts } from '@/lib/blog'
-import { getGalleryAlbums } from '@/lib/gallery'
+import { getGalleryAlbums, getGalleryAlbum } from '@/lib/gallery'
 import { SITE_CONFIG } from '@/lib/constants'
 
 export async function GET() {
@@ -24,10 +24,10 @@ export async function GET() {
 
     // Blog post images
     posts.forEach(post => {
-      if (post.featuredImage) {
-        const imageUrl = post.featuredImage.startsWith('http') 
-          ? post.featuredImage 
-          : `${baseUrl}${post.featuredImage}`
+      if ((post as any).featuredImage) {
+        const imageUrl = (post as any).featuredImage.startsWith('http')
+          ? (post as any).featuredImage
+          : `${baseUrl}${(post as any).featuredImage}`
         
         imageEntries.push(`
     <url>
@@ -69,28 +69,29 @@ export async function GET() {
     })
 
     // Gallery album images
-    albums.forEach(album => {
-      if (album.images && album.images.length > 0) {
-        album.images.forEach(image => {
+    for (const albumSlug of albums) {
+      const album = await getGalleryAlbum(albumSlug)
+      if (album && album.images && album.images.length > 0) {
+        album.images.forEach((image: any) => {
           const imageUrl = `${baseUrl}/images/gallery/${image.filename}`
-          
+
           imageEntries.push(`
     <url>
-      <loc>${baseUrl}/gallery/${album.slug}</loc>
+      <loc>${baseUrl}/gallery/${albumSlug}</loc>
       <image:image>
         <image:loc>${imageUrl}</image:loc>
-        <image:caption>${image.caption || `${album.title} - ${image.filename}`}</image:caption>
-        <image:title>${album.title}</image:title>
-        <image:geo_location>${album.location || 'Travel Photography'}</image:geo_location>
+        <image:caption>${image.caption || `${album.name} - ${image.filename}`}</image:caption>
+        <image:title>${album.name}</image:title>
+        <image:geo_location>Travel Photography</image:geo_location>
         <image:license>${baseUrl}/license</image:license>
       </image:image>
-      <lastmod>${album.dateModified || album.dateCreated || currentDate}</lastmod>
+      <lastmod>${currentDate}</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.9</priority>
     </url>`)
         })
       }
-    })
+    }
 
     // Profile and brand images
     const brandImages = [

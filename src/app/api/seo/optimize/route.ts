@@ -431,7 +431,7 @@ async function handleReinitialize(manager: SEOIntegrationManager) {
 async function handleHealthCheck(manager: SEOIntegrationManager) {
   console.log('🏥 Performing comprehensive health check...')
   
-  const healthChecks = {
+  const healthChecks: any = {
     systemInitialized: isInitialized,
     managerAvailable: !!manager,
     memoryUsage: process.memoryUsage(),

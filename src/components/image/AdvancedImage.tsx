@@ -238,8 +238,8 @@ export function AdvancedImage({
     blurDataURL: optimizedBlurDataURL,
     sizes: responsiveSizes,
     loading: loading || (priority ? 'eager' as const : 'lazy' as const),
-    onLoad: handleLoad,
-    onError: handleError,
+    onLoad: handleLoad as any,
+    onError: handleError as any,
     className: `${isLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-500 ease-out`,
     style: {
       objectFit,
@@ -352,6 +352,13 @@ export function ContentImage({
       {...props}
     />
   )
+}
+
+/**
+ * Smart Image - Alias for AdvancedImage with intelligent defaults
+ */
+export function SmartImage(props: AdvancedImageProps) {
+  return <AdvancedImage {...props} />
 }
 
 // Add CSS for shimmer animation

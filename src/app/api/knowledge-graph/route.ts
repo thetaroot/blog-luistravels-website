@@ -298,7 +298,7 @@ function getMostConnectedEntities(exportData: any, limit: number): any[] {
   })
 
   return connectionCounts
-    .sort((a, b) => b.connections - a.connections)
+    .sort((a: any, b: any) => b.connections - a.connections)
     .slice(0, limit)
 }
 
