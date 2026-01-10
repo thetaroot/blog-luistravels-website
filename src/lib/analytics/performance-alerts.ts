@@ -538,18 +538,18 @@ export class PerformanceAlertingSystem {
     alertsByMetric: Record<string, number>
     sessionAlertCount: number
   } {
-    const alertsByMSeverity: Record<string, number> = {}
+    const alertsByseverity: Record<string, number> = {}
     const alertsByMetric: Record<string, number> = {}
 
     this.alertHistory.forEach(alert => {
-      alertsByMSeverity[alert.severity] = (alertsByMSeverity[alert.severity] || 0) + 1
+      alertsByseverity[alert.severity] = (alertsByseverity[alert.severity] || 0) + 1
       alertsByMetric[alert.metric] = (alertsByMetric[alert.metric] || 0) + 1
     })
 
     return {
       totalAlerts: this.alertHistory.length,
       activeAlerts: this.getActiveAlerts().length,
-      alertsByMSeverity,
+      alertsByseverity,
       alertsByMetric,
       sessionAlertCount: this.sessionAlertCount
     }

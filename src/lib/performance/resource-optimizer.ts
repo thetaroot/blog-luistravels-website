@@ -454,12 +454,12 @@ export class ResourceOptimizer {
     if ('performance' in window) {
       const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
       
-      if (navigation.loadEventEnd - navigation.navigationStart > 3000) {
+      if (navigation.loadEventEnd - navigation.startTime > 3000) {
         recommendations.push('Overall page load time exceeds 3 seconds')
         recommendations.push('Consider implementing code splitting and lazy loading')
       }
 
-      if (navigation.domContentLoadedEventEnd - navigation.navigationStart > 1500) {
+      if (navigation.domContentLoadedEventEnd - navigation.startTime > 1500) {
         recommendations.push('DOM Content Loaded time is high')
         recommendations.push('Optimize critical rendering path and defer non-critical CSS/JS')
       }

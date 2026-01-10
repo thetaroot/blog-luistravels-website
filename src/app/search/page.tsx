@@ -3,10 +3,12 @@
  * Comprehensive search interface with entity recognition, topic clustering, and ML recommendations
  */
 
+'use client'
+
 import AdvancedSearchInterface from '@/components/search/AdvancedSearchInterface'
 import SearchAnalyticsDashboard from '@/components/search/SearchAnalytics'
 
-export const metadata = {
+/*export const metadata = {
   title: 'Advanced Search - Luis\' Travel Blog',
   description: 'Search through travel experiences, destinations, and cultural insights with our AI-powered search engine. Find content by location, activity, food, and more.',
   openGraph: {
@@ -14,7 +16,7 @@ export const metadata = {
     description: 'AI-powered search for travel experiences, destinations, and cultural insights',
     type: 'website'
   }
-}
+}*/
 
 export default function SearchPage() {
   return (

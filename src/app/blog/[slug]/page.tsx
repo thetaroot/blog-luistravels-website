@@ -10,16 +10,24 @@ import { SITE_CONFIG } from '@/lib/constants'
 import { SemanticBlogPost } from '@/components/semantic/SemanticBlogPost'
 import { generateArticleSchema } from '@/lib/seo/entity-optimization'
 
+// Only allow pre-generated paths
+export const dynamicParams = false
+
 // Generate static params for all blog posts at build time
 export async function generateStaticParams() {
   try {
     const slugs = await listBlogPostSlugs()
+    // Return at least one dummy entry if no posts exist
+    if (slugs.length === 0) {
+      console.warn('No blog posts found, skipping blog routes')
+      return [{ slug: '__no-posts__' }]
+    }
     return slugs.map((slug) => ({
       slug,
     }))
   } catch (error) {
     console.error('Error generating static params for blog posts:', error)
-    return []
+    return [{ slug: '__no-posts__' }]
   }
 }
 

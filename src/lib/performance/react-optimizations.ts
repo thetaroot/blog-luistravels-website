@@ -358,14 +358,14 @@ export function withPerformanceOptimization<P extends object>(
   
   // Apply React.memo if requested
   if (memo) {
-    OptimizedComponent = React.memo(OptimizedComponent) as React.ComponentType<P>
+    OptimizedComponent = React.memo(OptimizedComponent) as unknown as React.ComponentType<P>
   }
-  
+
   // Apply lazy loading if requested
   if (lazy) {
-    OptimizedComponent = React.lazy(() => 
+    OptimizedComponent = React.lazy(() =>
       Promise.resolve({ default: OptimizedComponent })
-    ) as React.ComponentType<P>
+    ) as unknown as React.ComponentType<P>
   }
   
   // Wrapped component with preloading

@@ -3,7 +3,7 @@
  * 10/10 SEO Dominance through Strategic Content Clustering
  */
 
-import { BlogPost } from '@/types/blog'
+import { BlogPost } from '@/lib/blog/types'
 
 export interface TopicCluster {
   id: string

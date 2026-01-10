@@ -91,8 +91,9 @@ export default function Navigation() {
   }, [language, updatePillPosition])
 
   // Optimized resize handler with throttling
-  const throttledResize = useThrottle(updatePillPosition, 16) // ~60fps
-  
+  const handleResize = useCallback(() => updatePillPosition(), [updatePillPosition])
+  const throttledResize = useThrottle(handleResize, 16) // ~60fps
+
   useEffect(() => {
     window.addEventListener('resize', throttledResize, { passive: true })
     return () => window.removeEventListener('resize', throttledResize)
@@ -175,17 +176,17 @@ export default function Navigation() {
   }, [isMobileMenuOpen, batchUpdate])
 
   // Optimized event handlers for interactions
-  const handleMobileMenuToggle = useOptimizedEventHandler(() => {
+  const handleMobileMenuToggle = useCallback(() => {
     setIsMobileMenuOpen(!isMobileMenuOpen)
-  }, { passive: true })
+  }, [isMobileMenuOpen])
 
-  const handleLanguageChange = useOptimizedEventHandler((lang: 'en' | 'de') => {
+  const handleLanguageChange = useCallback((lang: 'en' | 'de') => {
     setLanguage(lang)
-  }, { passive: true })
+  }, [setLanguage])
 
-  const handleMenuClose = useOptimizedEventHandler(() => {
+  const handleMenuClose = useCallback(() => {
     setIsMobileMenuOpen(false)
-  }, { passive: true })
+  }, [])
 
   return (
     <>

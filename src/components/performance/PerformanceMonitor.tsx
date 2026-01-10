@@ -93,10 +93,10 @@ const PerformanceMonitor: React.FC = () => {
   const initializeWebVitals = async () => {
     try {
       // Dynamic import to avoid SSR issues
-      const { getCLS, getFID, getFCP, getLCP, getTTFB } = await import('web-vitals')
-      
+      const { onCLS, onINP, onFCP, onLCP, onTTFB } = await import('web-vitals')
+
       // Largest Contentful Paint
-      getLCP((metric) => {
+      onLCP((metric) => {
         setStatus(prev => ({
           ...prev,
           metrics: { ...prev.metrics, lcp: metric.value },
@@ -104,8 +104,8 @@ const PerformanceMonitor: React.FC = () => {
         }))
       })
 
-      // First Input Delay
-      getFID((metric) => {
+      // Interaction to Next Paint (replaces FID)
+      onINP((metric) => {
         setStatus(prev => ({
           ...prev,
           metrics: { ...prev.metrics, fid: metric.value },
@@ -114,7 +114,7 @@ const PerformanceMonitor: React.FC = () => {
       })
 
       // Cumulative Layout Shift
-      getCLS((metric) => {
+      onCLS((metric) => {
         setStatus(prev => ({
           ...prev,
           metrics: { ...prev.metrics, cls: metric.value },
@@ -123,7 +123,7 @@ const PerformanceMonitor: React.FC = () => {
       })
 
       // Time to First Byte
-      getTTFB((metric) => {
+      onTTFB((metric) => {
         setStatus(prev => ({
           ...prev,
           metrics: { ...prev.metrics, ttfb: metric.value },

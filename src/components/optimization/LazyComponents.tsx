@@ -223,15 +223,15 @@ export function withLazyLoading<P extends object>(
     errorFallback?: ComponentType<{ error: Error; retry: () => void }>
   }
 ) {
-  const LazyComponent = codeSplittingManager.createLazyComponent(componentLoader, config)
+  const LazyComponent = codeSplittingManager.createLazyComponent(componentLoader, config as any)
   
   return function LazyWrapper(props: P) {
     return (
-      <OptimizedSuspense 
+      <OptimizedSuspense
         fallback={config.fallback || <LoadingSpinner />}
         chunkName={config.chunkName}
       >
-        <LazyComponent {...props} />
+        <LazyComponent {...props as any} />
       </OptimizedSuspense>
     )
   }

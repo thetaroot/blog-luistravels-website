@@ -43,8 +43,7 @@ export class Phase8CLI {
       defaultImage: '/images/og-default.jpg',
       twitterHandle: '@heretheregone',
       enablePerformanceOptimization: true,
-      enableAdvancedSEO: true,
-      enableMLRecommendations: true
+      enableAdvancedSearch: true
     })
   }
 

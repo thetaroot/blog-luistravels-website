@@ -18,11 +18,18 @@ interface BlogTagPageProps {
   searchParams: { page?: string }
 }
 
+// Only allow pre-generated paths
+export const dynamicParams = false
+
 // CRITICAL: Generate static params for all blog tags
 export async function generateStaticParams() {
   try {
     const tags = await getAllBlogTags()
     console.log(`🏷️ Generating ${tags.length} blog tag routes for SEO`)
+
+    if (tags.length === 0) {
+      return [{ tag: '__no-tags__' }]
+    }
 
     return tags.map((tagSlug) => ({
       tag: tagSlug

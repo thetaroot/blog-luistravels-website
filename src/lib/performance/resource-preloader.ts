@@ -339,7 +339,7 @@ export class CriticalResourcePreloader {
   preloadOnVisible(resources: PreloadResource[], target: Element): void {
     if (!this.intersectionObserver) return
 
-    const observer = this.intersectionObserver
+    const observer = this.intersectionObserver as IntersectionObserver
 
     // Store resources in element dataset for retrieval
     (target as any).__preloadResources = resources

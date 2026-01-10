@@ -3,12 +3,12 @@
  * 10/10 Knowledge Graph & Entity Authority Implementation
  */
 
-import { BlogPost } from '@/types/blog'
+import { BlogPost } from '@/lib/blog/types'
 
 export interface EntitySchema {
   '@context': string
   '@type': string
-  '@id': string
+  '@id'?: string
   [key: string]: any
 }
 
@@ -273,6 +273,7 @@ function generateArticleEntities(post: BlogPost): EntitySchema[] {
     entities.push({
       "@context": "https://schema.org",
       "@type": "Place",
+      "@id": `https://luistravels.com/location/${encodeURIComponent(post.location)}`,
       "name": post.location,
       "description": `Travel destination featured in ${post.title}`
     })
@@ -284,6 +285,7 @@ function generateArticleEntities(post: BlogPost): EntitySchema[] {
       entities.push({
         "@context": "https://schema.org",
         "@type": "Thing",
+        "@id": `https://luistravels.com/tag/${encodeURIComponent(tag)}`,
         "name": tag,
         "description": `Topic related to ${post.title}`
       })
@@ -301,14 +303,17 @@ function generateMentionedEntities(post: BlogPost): EntitySchema[] {
   
   // Always mention the author
   mentions.push({
+    "@context": "https://schema.org",
     "@type": "Person",
     "@id": "https://luistravels.com/#person"
   })
-  
+
   // Add location mentions
   if (post.location) {
     mentions.push({
+      "@context": "https://schema.org",
       "@type": "Place",
+      "@id": `https://luistravels.com/location/${encodeURIComponent(post.location)}`,
       "name": post.location
     })
   }
@@ -407,6 +412,7 @@ export function generateFAQSchema(faqs: Array<{question: string, answer: string}
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    "@id": "https://luistravels.com/faq",
     "mainEntity": faqs.map(faq => ({
       "@type": "Question",
       "name": faq.question,

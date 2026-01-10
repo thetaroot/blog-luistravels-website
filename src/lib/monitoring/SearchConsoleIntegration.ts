@@ -413,7 +413,13 @@ export class SearchConsoleIntegration {
     affected_urls?: string[]
     recommended_actions: string[]
   }>> {
-    const alerts = []
+    const alerts: Array<{
+      type: string
+      severity: 'low' | 'medium' | 'high' | 'critical'
+      message: string
+      affected_urls?: string[]
+      recommended_actions: string[]
+    }> = []
 
     try {
       // Get recent performance data

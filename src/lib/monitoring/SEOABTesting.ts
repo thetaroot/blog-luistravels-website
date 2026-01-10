@@ -630,7 +630,15 @@ export class SEOABTesting {
   }>> {
     console.log('🔍 Generating A/B test recommendations...')
 
-    const recommendations = []
+    const recommendations: Array<{
+      test_type: string
+      recommendation: string
+      potential_impact: 'low' | 'medium' | 'high'
+      effort_required: 'low' | 'medium' | 'high'
+      template_id?: string
+      target_pages: string[]
+      rationale: string
+    }> = []
 
     // Analyze site for testing opportunities
     const siteAnalysis = await this.analyzeSiteForTesting()

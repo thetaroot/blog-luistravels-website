@@ -431,7 +431,8 @@ export class SEOMonitor {
       position: Math.floor(Math.random() * 20) + 1,
       url: `https://heretheregone.com/blog/${keyword.replace(/\s+/g, '-')}`,
       search_volume: Math.floor(Math.random() * 10000) + 1000,
-      difficulty: Math.floor(Math.random() * 100) + 1
+      difficulty: Math.floor(Math.random() * 100) + 1,
+      change: 0
     }
   }
 

@@ -13,12 +13,12 @@ import type {
 // Extend Window interface for gtag
 declare global {
   interface Window {
-    gtag: (
+    gtag?: (
       command: 'config' | 'event' | 'js' | 'set',
       targetId?: string | Date,
       config?: Record<string, any>
     ) => void
-    dataLayer: any[]
+    dataLayer?: any[]
   }
 }
 
@@ -110,7 +110,7 @@ export class GoogleAnalyticsManager {
   private async loadGtagScript(): Promise<void> {
     return new Promise((resolve, reject) => {
       // Skip if already loaded
-      if (window.gtag) {
+      if (typeof window.gtag !== 'undefined') {
         resolve()
         return
       }
@@ -118,7 +118,7 @@ export class GoogleAnalyticsManager {
       // Initialize dataLayer
       window.dataLayer = window.dataLayer || []
       window.gtag = function() {
-        window.dataLayer.push(arguments)
+        window.dataLayer?.push(arguments)
       }
 
       // Load gtag script
@@ -137,8 +137,10 @@ export class GoogleAnalyticsManager {
    * Initialize GA4 configuration
    */
   private initializeGA4(): void {
+    if (!window.gtag) return
+
     window.gtag('js', new Date())
-    
+
     const config: Record<string, any> = {
       page_title: document.title,
       page_location: window.location.href,
@@ -176,7 +178,7 @@ export class GoogleAnalyticsManager {
    */
   private setupCoreWebVitalsTracking(): void {
     // Track Core Web Vitals from web-vitals library
-    import('web-vitals').then(({ onCLS, onFCP, onFID, onINP, onLCP, onTTFB }) => {
+    import('web-vitals').then(({ onCLS, onFCP, onINP, onLCP, onTTFB }) => {
       // Largest Contentful Paint
       onLCP((metric) => {
         this.trackCoreWebVital('LCP', metric.value, this.getCWVRating('LCP', metric.value), {
@@ -190,13 +192,6 @@ export class GoogleAnalyticsManager {
         this.trackCoreWebVital('INP', metric.value, this.getCWVRating('INP', metric.value), {
           interaction_type: metric.entries[0]?.name || 'unknown',
           target_element: this.getElementSelector(metric.entries[0]?.target as Element)
-        })
-      })
-
-      // First Input Delay (legacy support)
-      onFID((metric) => {
-        this.trackCoreWebVital('FID', metric.value, this.getCWVRating('FID', metric.value), {
-          event_type: metric.entries[0]?.name || 'unknown'
         })
       })
 
@@ -254,22 +249,24 @@ export class GoogleAnalyticsManager {
     }
 
     // Send to Google Analytics
-    window.gtag('event', 'core_web_vital', {
-      event_category: 'Core Web Vitals',
-      event_label: event.event_label,
-      value: event.value,
-      metric_name: metricName,
-      metric_rating: rating,
-      metric_value: value,
-      custom_parameter_1: this.calculateCWVScore(),
-      custom_parameter_2: rating,
-      custom_parameter_3: this.getOptimizationOpportunity(metricName, rating),
-      custom_parameter_4: this.getPerformanceTier(),
-      custom_parameter_5: this.getConnectionType(),
-      session_id: this.sessionId,
-      page_path: window.location.pathname,
-      ...additionalData
-    })
+    if (window.gtag) {
+      window.gtag('event', 'core_web_vital', {
+        event_category: 'Core Web Vitals',
+        event_label: event.event_label,
+        value: event.value,
+        metric_name: metricName,
+        metric_rating: rating,
+        metric_value: value,
+        custom_parameter_1: this.calculateCWVScore(),
+        custom_parameter_2: rating,
+        custom_parameter_3: this.getOptimizationOpportunity(metricName, rating),
+        custom_parameter_4: this.getPerformanceTier(),
+        custom_parameter_5: this.getConnectionType(),
+        session_id: this.sessionId,
+        page_path: window.location.pathname,
+        ...additionalData
+      })
+    }
 
     console.log(`📊 Core Web Vital tracked: ${metricName} = ${value}ms (${rating})`)
   }
@@ -282,7 +279,7 @@ export class GoogleAnalyticsManager {
     userExperienceMetrics: UserExperienceMetrics,
     insights: PerformanceInsights
   ): void {
-    if (!this.isInitialized) return
+    if (!this.isInitialized || !window.gtag) return
 
     // Track overall performance score
     window.gtag('event', 'performance_score', {
@@ -315,7 +312,7 @@ export class GoogleAnalyticsManager {
 
     // Track critical performance issues
     insights.criticalIssues.forEach((issue, index) => {
-      window.gtag('event', 'performance_issue', {
+      window.gtag?.('event', 'performance_issue', {
         event_category: 'Performance Issues',
         event_label: 'critical_issue',
         value: index + 1,
@@ -330,7 +327,7 @@ export class GoogleAnalyticsManager {
    * Track resource loading performance
    */
   trackResourcePerformance(resourceUrl: string, loadTime: number, cacheHit: boolean, resourceType: string): void {
-    if (!this.isInitialized) return
+    if (!this.isInitialized || !window.gtag) return
 
     window.gtag('event', 'resource_performance', {
       event_category: 'Resource Loading',
@@ -353,7 +350,7 @@ export class GoogleAnalyticsManager {
     interactionCount: number
     bounceRate: number
   }): void {
-    if (!this.isInitialized) return
+    if (!this.isInitialized || !window.gtag) return
 
     window.gtag('event', 'user_engagement', {
       event_category: 'User Experience',
@@ -384,7 +381,7 @@ export class GoogleAnalyticsManager {
         
         // Track milestone events
         if ([25, 50, 75, 90].includes(scrollDepth)) {
-          window.gtag('event', 'scroll_milestone', {
+          window.gtag?.('event', 'scroll_milestone', {
             event_category: 'User Engagement',
             event_label: `scroll_${scrollDepth}`,
             value: scrollDepth,
@@ -400,7 +397,7 @@ export class GoogleAnalyticsManager {
     const timeSpent = [10, 30, 60, 120, 300] // seconds
     timeSpent.forEach(seconds => {
       setTimeout(() => {
-        window.gtag('event', 'time_milestone', {
+        window.gtag?.('event', 'time_milestone', {
           event_category: 'User Engagement',
           event_label: `time_${seconds}s`,
           value: seconds,
@@ -411,7 +408,7 @@ export class GoogleAnalyticsManager {
 
     // Track visibility changes
     document.addEventListener('visibilitychange', () => {
-      window.gtag('event', 'visibility_change', {
+      window.gtag?.('event', 'visibility_change', {
         event_category: 'User Engagement',
         event_label: document.visibilityState,
         session_id: this.sessionId
@@ -445,7 +442,7 @@ export class GoogleAnalyticsManager {
    * Flush performance buffer to analytics
    */
   private flushPerformanceBuffer(): void {
-    if (this.performanceBuffer.length === 0) return
+    if (this.performanceBuffer.length === 0 || !window.gtag) return
 
     // Send batch event
     window.gtag('event', 'performance_batch', {

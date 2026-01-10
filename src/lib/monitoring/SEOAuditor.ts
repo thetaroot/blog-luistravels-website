@@ -1230,7 +1230,7 @@ export class SEOAuditor {
 
   private getImprovements(audits: SEOAuditReport[]): any[] {
     // Find areas where scores have improved
-    const improvements = []
+    const improvements: any[] = []
     
     // Group audits by URL
     const auditsByUrl = new Map<string, SEOAuditReport[]>()

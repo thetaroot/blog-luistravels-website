@@ -557,7 +557,7 @@ export class Phase9QualityAssurance {
     
     // Content structure
     if (post.content?.includes('#') || post.content?.includes('<h')) score += 5
-    if (post.gallery?.length > 0) score += 5
+    if ((post.gallery?.length ?? 0) > 0) score += 5
     
     return Math.min(100, score)
   }
@@ -567,8 +567,8 @@ export class Phase9QualityAssurance {
     
     // Modern content features
     if (post.coordinates) score += 10
-    if (post.entities?.length > 0) score += 10
-    if (post.semanticKeywords?.length > 0) score += 10
+    if ((post.entities?.length ?? 0) > 0) score += 10
+    if ((post.semanticKeywords?.length ?? 0) > 0) score += 10
     
     return Math.min(100, score)
   }

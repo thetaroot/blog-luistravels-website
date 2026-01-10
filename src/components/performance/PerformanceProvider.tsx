@@ -13,12 +13,12 @@ import GoogleAnalyticsManager from '@/lib/analytics/google-analytics'
 import SearchConsoleManager from '@/lib/analytics/search-console'
 import PerformanceAlertingSystem from '@/lib/analytics/performance-alerts'
 import CWVOptimizationEngine from '@/lib/analytics/optimization-engine'
-import type { 
-  PerformanceInsights, 
-  NavigationMetrics, 
-  UserExperienceMetrics,
-  ResourceMetrics 
+import type {
+  PerformanceInsights,
+  NavigationMetrics,
+  UserExperienceMetrics
 } from '@/lib/performance/advanced-monitoring'
+import type { ResourceMetrics } from '@/lib/performance/resource-preloader'
 import type { SearchConsoleInsights } from '@/lib/analytics/search-console'
 import type { OptimizationAnalysis } from '@/lib/analytics/optimization-engine'
 import type { Alert } from '@/lib/analytics/performance-alerts'

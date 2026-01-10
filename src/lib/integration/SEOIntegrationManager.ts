@@ -21,16 +21,16 @@ interface SEOIntegrationConfig {
   siteUrl: string
   defaultImage: string
   twitterHandle: string
-  authorName: string
-  authorUrl: string
-  logo: string
-  socialProfiles: string[]
-  organization: any
-  enableEntityExtraction: boolean
-  enableTopicClustering: boolean
-  enableLocalSEO: boolean
-  enablePerformanceOptimization: boolean
-  enableAdvancedSearch: boolean
+  authorName?: string
+  authorUrl?: string
+  logo?: string
+  socialProfiles?: string[]
+  organization?: any
+  enableEntityExtraction?: boolean
+  enableTopicClustering?: boolean
+  enableLocalSEO?: boolean
+  enablePerformanceOptimization?: boolean
+  enableAdvancedSearch?: boolean
 }
 
 interface ComprehensiveSEOResult {
@@ -73,22 +73,35 @@ export class SEOIntegrationManager {
 
   constructor(config: SEOIntegrationConfig) {
     console.log('🚀 Initializing SEO Integration Manager...')
-    
+
+    // Provide default values for required fields
+    const fullConfig = {
+      ...config,
+      authorName: config.authorName || 'Luis Gunther',
+      authorUrl: config.authorUrl || 'https://heretheregone.com',
+      logo: config.logo || '/images/logo.png',
+      socialProfiles: config.socialProfiles || [],
+      organization: config.organization || {
+        name: 'Here There & Gone',
+        type: 'Organization'
+      }
+    }
+
     // Initialize all SEO components
-    this.schemaGenerator = new SchemaGenerator(config)
+    this.schemaGenerator = new SchemaGenerator(fullConfig as any)
     this.localSEOOptimizer = new LocalSEOOptimizer()
-    this.metaGenerator = new SEOMetaGenerator(config)
+    this.metaGenerator = new SEOMetaGenerator(fullConfig as any)
     this.entityExtractor = new EntityExtractor()
     this.topicClusterManager = new TopicClusterManager()
     this.searchEngine = new AdvancedSearchEngine()
     
     this.performanceOptimizer = new PerformanceOptimizer({
-      enableImageOptimization: config.enablePerformanceOptimization,
-      enableLazyLoading: config.enablePerformanceOptimization,
-      enableCriticalCSS: config.enablePerformanceOptimization,
-      enableServiceWorker: config.enablePerformanceOptimization,
-      enablePreloading: config.enablePerformanceOptimization,
-      enableCompression: config.enablePerformanceOptimization,
+      enableImageOptimization: config.enablePerformanceOptimization || false,
+      enableLazyLoading: config.enablePerformanceOptimization || false,
+      enableCriticalCSS: config.enablePerformanceOptimization || false,
+      enableServiceWorker: config.enablePerformanceOptimization || false,
+      enablePreloading: config.enablePerformanceOptimization || false,
+      enableCompression: config.enablePerformanceOptimization || false,
       cacheStrategies: [
         { type: 'browser', ttl: 31536000, key: 'static', tags: ['static'] },
         { type: 'cdn', ttl: 3600, key: 'content', tags: ['content'] },
@@ -99,10 +112,10 @@ export class SEOIntegrationManager {
 
     // Initialize Phase 7 Performance Optimizer
     this.phase7Optimizer = new Phase7PerformanceOptimizer({
-      enableAIOptimization: config.enablePerformanceOptimization,
+      enableAIOptimization: config.enablePerformanceOptimization || false,
       enableAdvancedCaching: true,
       enablePredictivePreloading: true,
-      enableQuantumOptimization: config.enablePerformanceOptimization,
+      enableQuantumOptimization: config.enablePerformanceOptimization || false,
       aggressiveOptimizationMode: true,
       targetCoreWebVitalsScore: 95,
       maxOptimizationCycles: 10
@@ -111,11 +124,11 @@ export class SEOIntegrationManager {
     // Initialize Phase 8 SEO Dominance Engine
     this.phase8SEODominance = new Phase8SEODominance({
       enableAdvancedRankingSignals: true,
-      enableCompetitiveAnalysis: config.enableAdvancedSEO,
+      enableCompetitiveAnalysis: config.enableAdvancedSearch || false,
       enableSearchIntentOptimization: true,
       enableKnowledgeGraphSignals: true,
       enableLocalDominance: true,
-      enableEATOptimization: config.enableAdvancedSEO,
+      enableEATOptimization: config.enableAdvancedSearch || false,
       aggressiveSEOMode: true,
       targetSearchQueries: []
     })
@@ -123,7 +136,7 @@ export class SEOIntegrationManager {
     // Initialize Phase 9 Quality Assurance Engine
     this.phase9QualityAssurance = new Phase9QualityAssurance({
       enableAdvancedQualityChecks: true,
-      enableAutomaticOptimization: config.enablePerformanceOptimization,
+      enableAutomaticOptimization: config.enablePerformanceOptimization || false,
       enableCompetitiveValidation: true,
       enableRealTimeMonitoring: true,
       targetQualityThreshold: 95,
@@ -259,12 +272,10 @@ export class SEOIntegrationManager {
     // PHASE 3: Schema Generation
     console.log('📋 Phase 3: Schema markup generation...')
     const schemas = this.schemaGenerator.generateBlogPostSchema(post)
-    const locationSchemas = this.schemaGenerator.generateLocationSchema(post)
-    const allSchemas = [...schemas, ...locationSchemas]
-    
-    if (allSchemas.length > 0) {
+
+    if (schemas.length > 0) {
       score += 15
-      recommendations.push(`Generated ${allSchemas.length} schema markup types`)
+      recommendations.push(`Generated ${schemas.length} schema markup types`)
     }
 
     // PHASE 4: Local SEO Optimization
@@ -297,9 +308,9 @@ export class SEOIntegrationManager {
     let relatedPosts: any[] = []
     if (options.includeAdvancedSearch) {
       try {
-        const recommendations = await this.searchEngine.getRecommendations(post.slug, 5)
-        relatedPosts = recommendations
-        
+        const mlRecommendations = await this.searchEngine.getRecommendations(post.slug, 5)
+        relatedPosts = mlRecommendations
+
         if (relatedPosts.length > 0) {
           score += 10
           recommendations.push(`Generated ${relatedPosts.length} ML-powered recommendations`)
@@ -405,7 +416,7 @@ export class SEOIntegrationManager {
           // Phase 8 SEO Dominance results
           dominanceMetrics: dominanceResult.dominanceMetrics,
           rankingSignals: dominanceResult.searchOptimization.rankingSignals,
-          competitiveAnalysis: dominanceResult.searchOptimization.competitiveAnalysis,
+          competitiveAdvantage: dominanceResult.searchOptimization.competitiveAdvantage,
           targetQueries: dominanceResult.searchOptimization.targetQueries,
           keywordOpportunities: dominanceResult.keywordOpportunities,
           knowledgeGraphSignals: dominanceResult.searchOptimization.knowledgeGraphSignals,
@@ -443,8 +454,8 @@ export class SEOIntegrationManager {
         })
         
         // Add competitive advantages
-        if (dominanceResult.searchOptimization.competitiveAnalysis.advantages.length > 0) {
-          recommendations.push(`⚔️ Competitive advantages: ${dominanceResult.searchOptimization.competitiveAnalysis.advantages.slice(0, 2).join(', ')}`)
+        if (dominanceResult.searchOptimization.competitiveAdvantage?.advantages?.length > 0) {
+          recommendations.push(`⚔️ Competitive advantages: ${dominanceResult.searchOptimization.competitiveAdvantage.advantages.slice(0, 2).join(', ')}`)
         }
         
         console.log(`🏆 Phase 8 SEO Dominance completed: ${dominanceResult.dominanceMetrics.seoScore}/100`)
@@ -540,7 +551,7 @@ export class SEOIntegrationManager {
         description: post.excerpt,
         optimizedDescription
       },
-      schemas: allSchemas,
+      schemas,
       metaTags,
       entities,
       topicCluster,

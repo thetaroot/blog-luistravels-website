@@ -56,7 +56,7 @@ export function SEODashboard() {
   const fetchDashboardData = async () => {
     try {
       const data = seoMonitor.getMonitoringReport()
-      setMetrics(data)
+      setMetrics(data as unknown as DashboardMetrics)
       setIsLoading(false)
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error)

@@ -18,11 +18,18 @@ interface BlogCategoryPageProps {
   searchParams: { page?: string }
 }
 
+// Only allow pre-generated paths
+export const dynamicParams = false
+
 // CRITICAL: Generate static params for all blog categories
 export async function generateStaticParams() {
   try {
     const categories = await getBlogCategories()
     console.log(`📝 Generating ${categories.length} blog category routes for SEO`)
+
+    if (categories.length === 0) {
+      return [{ category: '__no-categories__' }]
+    }
 
     return categories.map((categorySlug) => ({
       category: categorySlug

@@ -230,7 +230,7 @@ export class Phase8SEODominance {
         targetQueries,
         rankingSignals,
         searchIntentAnalysis,
-        competitiveAnalysis,
+        competitiveAdvantage: competitiveAnalysis,
         knowledgeGraphSignals,
         localDominanceFactors,
         eatOptimization

@@ -348,7 +348,7 @@ export class PerformanceOptimizer {
 
     // 2. Optimize inline styles and scripts
     optimizedContent = optimizedContent.replace(
-      /<style[^>]*>(.*?)<\/style>/gis,
+      /<style[^>]*>([\s\S]*?)<\/style>/gi,
       (match, css) => {
         const minifiedCSS = css
           .replace(/\s{2,}/g, ' ')

@@ -138,7 +138,7 @@ export class TopicClusterManager {
     const uniqueLinks = this.deduplicateLinks(internalLinks)
     const rankedLinks = uniqueLinks
       .sort((a, b) => b.relevanceScore - a.relevanceScore)
-      .slice(0, Math.min(500, posts.length * 5)) // Max 5 links per post
+      .slice(0, Math.min(500, this.posts.size * 5)) // Max 5 links per post
 
     console.log(`✅ Generated ${rankedLinks.length} strategic internal links`)
     return rankedLinks

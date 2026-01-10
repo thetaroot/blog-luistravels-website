@@ -1,0 +1,52 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+Disallow: /private/
+Disallow: /temp/
+Disallow: *.json$
+Disallow: /404
+Disallow: /500
+
+User-agent: GPTBot
+Allow: /
+Allow: /blog/
+Allow: /gallery/
+Allow: /contact/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+
+User-agent: Google-Extended
+Allow: /
+Allow: /blog/
+Allow: /gallery/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+Disallow: /contact/
+
+User-agent: CCBot
+Allow: /
+Allow: /blog/
+Allow: /gallery/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+Disallow: /contact/
+
+User-agent: FacebookBot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+
+User-agent: TwitterBot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+
+Sitemap: https://luistravels.com/sitemap.xml
+Host: https://luistravels.com

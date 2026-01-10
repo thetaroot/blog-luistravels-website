@@ -179,6 +179,9 @@ export function ImageOptimizationProvider({
     }
   }
 
+  // Store reference to global performance API before creating local performance object
+  const globalPerformance = typeof window !== 'undefined' ? window.performance : undefined
+
   // Performance utilities
   const performance = {
     preloadImage: async (src: string): Promise<void> => {
@@ -187,11 +190,11 @@ export function ImageOptimizationProvider({
       }
 
       return new Promise((resolve, reject) => {
-        const startTime = performance.now()
+        const startTime = globalPerformance?.now() || Date.now()
         const img = new Image()
-        
+
         img.onload = () => {
-          const loadTime = performance.now() - startTime
+          const loadTime = (globalPerformance?.now() || Date.now()) - startTime
           performanceCache.current.set(src, true)
           
           if (enablePerformanceTracking) {

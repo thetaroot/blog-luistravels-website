@@ -16,18 +16,25 @@ interface GalleryAlbumPageProps {
   params: { album: string }
 }
 
+// Only allow pre-generated paths
+export const dynamicParams = false
+
 // CRITICAL: Generate static params for all gallery albums
 export async function generateStaticParams() {
   try {
     const albums = await getGalleryAlbums()
     console.log(`🖼️ Generating ${albums.length} gallery album routes for SEO`)
 
+    if (albums.length === 0) {
+      return [{ album: '__no-albums__' }]
+    }
+
     return albums.map((albumSlug) => ({
       album: albumSlug
     }))
   } catch (error) {
     console.warn('Gallery albums not found, generating empty static params')
-    return []
+    return [{ album: '__no-albums__' }]
   }
 }
 

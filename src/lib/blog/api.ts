@@ -3,7 +3,7 @@
  * Temporary mock implementation
  */
 
-import { getBlogPost as getBlogPostFromIndex } from './index'
+import { getBlogPost as getBlogPostFromIndex, listBlogPosts as listBlogPostsFromIndex } from './index'
 
 export interface BlogApiResponse {
   success: boolean
@@ -11,7 +11,7 @@ export interface BlogApiResponse {
   data?: any
 }
 
-export { getBlogPostFromIndex as getBlogPost }
+export { getBlogPostFromIndex as getBlogPost, listBlogPostsFromIndex as listBlogPosts }
 
 export async function optimizeBlogPost(slug: string, options: any): Promise<BlogApiResponse> {
   // Mock implementation for Phase 7/8 API routes

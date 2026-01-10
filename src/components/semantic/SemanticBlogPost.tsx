@@ -1,7 +1,19 @@
 import React from 'react'
-import { BlogPost } from '@/types/blog'
 import { formatDate } from '@/lib/utils'
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs'
+
+interface BlogPost {
+  title: string
+  date: string
+  modifiedDate?: string
+  location?: string
+  excerpt?: string
+  gallery?: string[]
+  content?: string
+  tags?: string[]
+  slug: string
+  language?: string
+}
 
 interface SemanticBlogPostProps {
   post: BlogPost
@@ -96,10 +108,10 @@ export function SemanticBlogPost({ post }: SemanticBlogPostProps) {
         )}
       </header>
       
-      <div 
+      <div
         itemProp="articleBody"
         className="article-content prose prose-lg max-w-none"
-        dangerouslySetInnerHTML={{ __html: post.content }}
+        dangerouslySetInnerHTML={{ __html: post.content || '' }}
       />
       
       <footer className="article-footer">

@@ -47,7 +47,7 @@ export class INPOptimizer {
     }
 
     this.setupINPObserver()
-    this.setupOptimizations()
+    // this.setupOptimizations() // Method not implemented
     this.scheduleReporting()
     
     this.isInitialized = true
@@ -239,12 +239,13 @@ export class INPOptimizer {
    */
   private static optimizeButtonFeedback(target: Element): void {
     if (target.matches('button, [role="button"], input[type="button"], input[type="submit"]')) {
+      const htmlTarget = target as HTMLElement
       // Use CSS transforms for better performance
-      target.style.transform = 'scale(0.98)'
-      target.style.transition = 'transform 0.1s ease'
-      
+      htmlTarget.style.transform = 'scale(0.98)'
+      htmlTarget.style.transition = 'transform 0.1s ease'
+
       setTimeout(() => {
-        target.style.transform = ''
+        htmlTarget.style.transform = ''
       }, 100)
     }
   }

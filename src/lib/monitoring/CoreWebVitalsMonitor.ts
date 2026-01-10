@@ -180,7 +180,7 @@ export class CoreWebVitalsMonitor {
           attribution: {
             element: lcpEntry.element?.tagName || 'unknown',
             elementSelector: this.getElementSelector(lcpEntry.element),
-            loadState: document.readyState,
+            loadState: document.readyState as 'loading' | 'dom-interactive' | 'dom-complete',
             renderTime: lcpEntry.renderTime || lcpEntry.startTime,
             loadTime: lcpEntry.loadTime || 0
           }
@@ -584,9 +584,9 @@ export class CoreWebVitalsMonitor {
   /**
    * Generate metrics summary
    */
-  private generateMetricsSummary(metrics: WebVitalMetric[]): any {
-    const summary: any = {}
-    
+  private generateMetricsSummary(metrics: WebVitalMetric[]): Record<string, any> {
+    const summary = {} as Record<string, any>
+
     ['LCP', 'INP', 'CLS', 'FCP', 'TTFB'].forEach(metricName => {
       const metricData = metrics.filter(m => m.name === metricName)
       if (metricData.length > 0) {
@@ -621,7 +621,7 @@ export class CoreWebVitalsMonitor {
     const cutoff = Date.now() - timeRanges[period]
     const recentMetrics = this.metrics.filter(m => m.timestamp > cutoff)
 
-    const trends: WebVitalTrend[] = []
+    const trends: WebVitalTrend[] = [];
 
     ['LCP', 'INP', 'CLS', 'FCP', 'TTFB'].forEach(metricName => {
       const metricData = recentMetrics.filter(m => m.name === metricName)
@@ -637,7 +637,7 @@ export class CoreWebVitalsMonitor {
   /**
    * Calculate performance trend
    */
-  private calculateTrend(metrics: WebVitalMetric[], period: string): WebVitalTrend {
+  private calculateTrend(metrics: WebVitalMetric[], period: '1h' | '24h' | '7d' | '30d'): WebVitalTrend {
     const bucketSize = this.getBucketSize(period)
     const buckets = this.groupMetricsIntoBuckets(metrics, bucketSize)
     
@@ -847,7 +847,7 @@ export class CoreWebVitalsMonitor {
   }
 
   private getDeviceBreakdown(): Record<string, any> {
-    const breakdown: Record<string, any> = {}
+    const breakdown = {} as Record<string, any>
     
     ['mobile', 'desktop', 'tablet'].forEach(device => {
       const deviceMetrics = this.metrics.filter(m => m.device_type === device)

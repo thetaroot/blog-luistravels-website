@@ -261,9 +261,9 @@ export function BundleOptimizationProvider({
    */
   const reportNavigationMetrics = (entry: PerformanceNavigationTiming): void => {
     const metrics = {
-      loadTime: entry.loadEventEnd - entry.navigationStart,
-      domContentLoaded: entry.domContentLoadedEventEnd - entry.navigationStart,
-      firstPaint: entry.responseEnd - entry.navigationStart,
+      loadTime: entry.loadEventEnd - entry.startTime,
+      domContentLoaded: entry.domContentLoadedEventEnd - entry.startTime,
+      firstPaint: entry.responseEnd - entry.startTime,
       ttfb: entry.responseStart - entry.requestStart
     }
 

@@ -4,7 +4,7 @@
  * Real-time performance tracking and optimization suggestions
  */
 
-interface INPEntry extends PerformanceEventTiming {
+interface INPEntry extends Omit<PerformanceEventTiming, 'interactionId'> {
   processingStart: number
   processingEnd: number
   presentationTime: number
@@ -396,8 +396,8 @@ class INPMonitor {
     const metrics = this.getCurrentMetrics()
     
     // Send to analytics (replace with your analytics service)
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'inp_measurement', {
+    if (typeof window !== 'undefined' && typeof (window as any).gtag !== 'undefined') {
+      (window as any).gtag('event', 'inp_measurement', {
         custom_parameter: metrics.value,
         value: Math.round(metrics.value)
       })
